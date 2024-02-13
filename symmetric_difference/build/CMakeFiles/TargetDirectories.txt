@@ -1,4 +1,0 @@
-/Users/rustamsubkhankulov/Desktop/workspace/algo-prac/1/symmetric_difference/build/CMakeFiles/symmdiff.dir
-/Users/rustamsubkhankulov/Desktop/workspace/algo-prac/1/symmetric_difference/build/CMakeFiles/symmdiff_std.dir
-/Users/rustamsubkhankulov/Desktop/workspace/algo-prac/1/symmetric_difference/build/CMakeFiles/edit_cache.dir
-/Users/rustamsubkhankulov/Desktop/workspace/algo-prac/1/symmetric_difference/build/CMakeFiles/rebuild_cache.dir
