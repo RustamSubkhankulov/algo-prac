@@ -33,17 +33,16 @@ def parse_args(argv):
 
 #------------------
 
-def gen_seq(max_num: int, num: int, delim: int):
+def gen_seq(max_num: int, num: int):
   
-  elems = set()
+  elems = []
   for _ in range(num):
-    elems.add(randrange(max_num) + 1)
+    elems.append(randrange(max_num) + 1)
+  elems.sort()
 
   seq = []
   for elem in elems:
-    seq.append(f"{elem} ")
-
-  seq.append("0 ")
+    seq.append(f"{elem}\n")
 
   return seq
 
@@ -59,10 +58,10 @@ max_num, num1, num2, filename = parse_args(sys.argv)
 
 with open(filename, mode = 'w') as out_file:
 
-  delim = 0
+  out_file.write(f"{num1} {num2}\n")
 
-  seq = gen_seq(max_num, num1, delim)
+  seq = gen_seq(max_num, num1)
   write_to_file(out_file, seq)
 
-  seq = gen_seq(max_num, num2, delim)
+  seq = gen_seq(max_num, num2)
   write_to_file(out_file, seq)
