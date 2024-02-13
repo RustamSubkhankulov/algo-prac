@@ -6,7 +6,8 @@
 
 = gcc/g++ - __int128_t, unsigned __int128_t
 
-= Degenerate fibo 
+= Degenerate recursive fibo
+
 int fibo(int n) {
   const int MAXN = 1000;
   static int c[MAXN];
@@ -24,7 +25,7 @@ N2 = T x2 + y2
 regular: N1 × N2 = T^2x1x2 + T((x1y2 + x2y1) + y1y2
 smart: N1 × N2 = T^2x1x2 + T((x1 + y1)(x2 + y2) − x1x2 − y1y2) + y1y2
 
-= fast pow - O(logN)
+= fast recursive pow - O(logN)
 
 SomeType pow(SomeType x, int n) {
   if (n == 0) return (SomeType)1;
