@@ -23,9 +23,6 @@ void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, int num);
 template<typename IntType = int>
 int polycalc_horner(const std::vector<IntType>& coeffs, IntType val);
 
-template<typename IntType = int>
-int polycalc_horner_stabilized(const std::vector<IntType>& coeffs, IntType val);
-
 template<typename Type>
 Type fast_pow(Type value, int degree);
 
@@ -43,13 +40,14 @@ int main() {
 
   std::cin.exceptions(prev_exc_mask);
 
-  for (auto val : values) {
+  #if defined(MOD)
+    auto mod = [run_opts](const int& elem){ return elem % run_opts.mod; };
+    std::transform(std::begin(coeffs), std::end(coeffs), std::begin(coeffs), mod);
+    std::transform(std::begin(values), std::end(values), std::begin(values), mod);
+  #endif 
 
-    #if !defined(STAB)
-      std::cout << polycalc_horner(coeffs, val) << std::endl;
-    #else 
-      std::cout << polycalc_horner_stabilized(coeffs, val) << std::endl;
-    #endif
+  for (auto val : values) {
+    std::cout << (polycalc_horner(coeffs, val) % run_opts.mod) << std::endl;
   }
 
   return 0;
@@ -91,25 +89,6 @@ int polycalc_horner(const std::vector<IntType>& coeffs, IntType val) {
   }
 
   return res;
-}
-
-template<typename IntType>
-int polycalc_horner_stabilized(const std::vector<IntType>& coeffs, IntType val) {
-
-  auto size = coeffs.size();  
-
-  if (std::abs(val) < 1) {
-    return polycalc_horner(coeffs, val);
-  }
-
-  float res = (float) coeffs.front();
-  float val_inv = 1. / float(val);
-
-  for (int ind = 1; ind < size; ++ind) {
-    res = res * val_inv + float(coeffs[ind]);
-  }
-
-  return fast_pow(val, size - 1) * res;
 }
 
 template<typename Type>

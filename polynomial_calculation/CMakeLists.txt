@@ -11,6 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
 
 add_executable(polycalc polycalc.cpp)
-add_executable(polycalc_stab polycalc.cpp)
+add_executable(polycalc_mod polycalc.cpp)
 
-target_compile_definitions(polycalc_stab PRIVATE -DSTAB)
+target_compile_definitions(polycalc_mod PRIVATE -DMOD)
