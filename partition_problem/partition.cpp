@@ -14,7 +14,7 @@ template<typename OutputIt, typename CharT = char, typename IntType = int>
 void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, size_t num);
 
 template<typename InputIt, typename IntType = int>
-IntType heapdiff(InputIt begin, InputIt end);
+IntType partition(InputIt begin, InputIt end);
 
 int main() {
 
@@ -53,7 +53,7 @@ void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, size_t num) {
 }
 
 template<typename InputIt, typename IntType>
-IntType heapdiff(InputIt begin, InputIt end) {
+IntType partition(InputIt begin, InputIt end) {
 
   return 0;
 }
