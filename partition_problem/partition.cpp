@@ -19,8 +19,8 @@ typename BidirIt::value_type partition_diff_greedy(BidirIt begin, BidirIt end);
 template<typename BidirIt>
 typename BidirIt::value_type partition_diff_pseudopoly(BidirIt begin, BidirIt end);
 
-template<typename BidirIt>
-typename BidirIt::value_type partition_diff_karmarkara(BidirIt begin, BidirIt end);
+template<typename IntType = int>
+IntType partition_diff_karmarkara(std::vector<IntType>& elems);
 
 int main() {
 
@@ -47,8 +47,7 @@ int main() {
 
   #elif defined(KARMARKARA)
 
-    std::cout << partition_diff_karmarkara(std::begin(weights), std::end(weights)) 
-              << std::endl;
+    std::cout << partition_diff_karmarkara(weights) << std::endl;
 
   #else 
 
@@ -92,8 +91,28 @@ typename BidirIt::value_type partition_diff_pseudopoly(BidirIt begin, BidirIt en
   return 0;
 }
 
-template<typename BidirIt>
-typename BidirIt::value_type partition_diff_karmarkara(BidirIt begin, BidirIt end) {
+template<typename IntType>
+IntType poll_heap(std::vector<IntType>& elems) {
 
-  
+  std::pop_heap(elems.begin(), elems.end());
+  IntType elem = elems.back();
+  elems.pop_back();
+  return elem;
+}
+
+template<typename IntType>
+IntType partition_diff_karmarkara(std::vector<IntType>& elems) {
+
+  std::make_heap(elems.begin(), elems.end());
+
+  while (elems.size() > 1) {
+
+    IntType elem1 = poll_heap(elems);
+    IntType elem2 = poll_heap(elems);
+
+    elems.push_back(elem1 - elem2);
+    std::push_heap(elems.begin(), elems.end());
+  }
+
+  return elems.front();
 }
