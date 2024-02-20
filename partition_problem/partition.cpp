@@ -11,10 +11,16 @@
 using std::size_t;
 
 template<typename OutputIt, typename CharT = char, typename IntType = int>
-void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, size_t num);
+void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, int num);
 
-template<typename InputIt, typename IntType = int>
-IntType partition(InputIt begin, InputIt end);
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_greedy(BidirIt begin, BidirIt end);
+
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_pseudopoly(BidirIt begin, BidirIt end);
+
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_karmarkara(BidirIt begin, BidirIt end);
 
 int main() {
 
@@ -29,31 +35,65 @@ int main() {
 
   std::cin.exceptions(prev_exc_mask);
 
-  std::cout << heapdiff(std::begin(weights), std::end(weights)) << std::endl;
+  #if defined(GREEDY)
+
+    std::cout << partition_diff_greedy(std::begin(weights), std::end(weights)) 
+              << std::endl;
+
+  #elif defined(PSEUDOPOLY)
+
+    std::cout << partition_diff_pseudopoly(std::begin(weights), std::end(weights)) 
+              << std::endl;
+
+  #elif defined(KARMARKARA)
+
+    std::cout << partition_diff_karmarkara(std::begin(weights), std::end(weights)) 
+              << std::endl;
+
+  #else 
+
+    std::cerr << "None of the options for algorithm type is selected, terminating."
+              << std::endl;
+    std::abort();
+
+  #endif  
 }
 
 template<typename OutputIt, typename CharT, typename IntType>
-void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, size_t num) {
+void read_sequence(std::basic_istream<CharT>& is, OutputIt dest, int num) {
 
-  IntType elem, prev;
+  IntType elem;
   size_t count = 0;
 
-  if (count++ < num && is >> prev) {
-    *dest++ = prev;
-  }
-
   while (count++ < num && is >> elem) {
-    
-    if (elem != prev) {
-      *dest = prev = elem;
-    }
-
-    ++dest;
+    *dest++ = elem;
   }
 }
 
-template<typename InputIt, typename IntType>
-IntType partition(InputIt begin, InputIt end) {
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_greedy(BidirIt begin, BidirIt end) {
+
+  using value_type = typename BidirIt::value_type;
+  value_type sum1, sum2;
+  sum1 = sum2 = 0;
+
+  auto divide = [&sum1, &sum2](const value_type& value)
+                { if (sum1 < sum2) sum1 += value; else sum2 += value; };
+
+  std::for_each(std::reverse_iterator<BidirIt>(end), 
+                std::reverse_iterator<BidirIt>(begin), divide);
+
+  return std::abs(sum1 - sum2);
+}
+
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_pseudopoly(BidirIt begin, BidirIt end) {
 
   return 0;
+}
+
+template<typename BidirIt>
+typename BidirIt::value_type partition_diff_karmarkara(BidirIt begin, BidirIt end) {
+
+  
 }
