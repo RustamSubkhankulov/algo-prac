@@ -29,7 +29,7 @@ smart: N1 × N2 = T^2x1x2 + T((x1 + y1)(x2 + y2) − x1x2 − y1y2) + y1y2
 
 SomeType pow(SomeType x, int n) {
   if (n == 0) return (SomeType)1;
-  if (n & 1) return pow(x, n-1);
+  if (n & 1) return x * pow(x, n-1);
   SomeType y = pow(x, n/2);
   return y*y;
 }
