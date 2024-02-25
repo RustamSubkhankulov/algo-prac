@@ -19,5 +19,14 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(longarithm longarithm.cpp)
-target_link_libraries(longarithm PUBLIC lint)
+set(EXEC_SRC_DIR src)
+set(EXEC_INC_DIR inc)
+
+file(GLOB EXEC_SOURCES CONFIGURE_DEPENDS ${EXEC_SRC_DIR}/*.cpp)
+
+add_executable(${PROJECT_NAME} ${EXEC_SOURCES})
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${EXEC_INC_DIR})
+
+target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC lint)

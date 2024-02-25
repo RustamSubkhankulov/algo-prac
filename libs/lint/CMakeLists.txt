@@ -26,10 +26,13 @@ file(GLOB LIB_SOURCES CONFIGURE_DEPENDS ${LIB_SRC_DIR}/*.cpp)
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
+target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_INC_DIR})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${LIB_INC_DIR}/lint.hpp)
+
+set(CMAKE_INSTALL_PREFIX "")
 
 install(
         TARGETS ${PROJECT_NAME} 
         LIBRARY DESTINATION lib/${PROJECT_NAME}
-        PUBLIC_HEADER DESTINATION inc/${PROJECT_NAME}
+        PUBLIC_HEADER DESTINATION lib/inc/${PROJECT_NAME}
         )
