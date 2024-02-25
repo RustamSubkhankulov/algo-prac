@@ -1,12 +1,13 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 #include <iterator>
 #include <utility>
 
-#include "io.hpp"
 #include "lint/lint.hpp"
+// using namespace LONGARITHM;
 
 int main() {
 
@@ -15,11 +16,18 @@ int main() {
   auto prev_exc_mask = std::cin.exceptions();
   std::cin.exceptions(std::ios_base::failbit | std::ios_base::badbit);
 
-  int num;
-  std::cin >> num;
-  read_sequence(std::cin, std::back_inserter(values), num);
+  Lint first, second;
+  char oper;
+
+  std::cin >> first >> oper >> second;
+  if (oper != '+' && oper != '-') {
+    throw std::invalid_argument("Operations supported: '+' and '-'");
+  }
 
   std::cin.exceptions(prev_exc_mask);
 
-  foo();
+  // Lint res = first + second;
+  std::cout << "First: "  << first  << std::endl;
+  std::cout << "Second: " << second << std::endl;
+  // std::cout << res;
 }

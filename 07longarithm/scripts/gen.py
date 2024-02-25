@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-from random import randrange
+from random import randrange, randint
 
 #==================
 
@@ -9,28 +9,34 @@ def parse_args(argv):
   """
   Parse sys.argv for arguments of prog.
   """
-  if len(argv) != 3:
+  if len(argv) != 4:
     print("Usage: ./gen.py num filename \n")
-    print("where 1. num - number of elements in array \n")
-    print("      2. filename - output file name. \n")
+    print("where 1. len1 - len of the first num \n")
+    print("      2. len2 - len of the second num \n")
+    print("      3. filename - output file name. \n")
     sys.exit(1)
 
-  num = int(argv[1])
-  filename = argv[2]
+  len1 = int(argv[1])
+  len2 = int(argv[2])
+  filename = argv[3]
 
-  if num < 1 or num > 1E8:
-    print("Number of elements should be between 1 and 10^8. \n")
+  if len1 < 1 or len1 > 1000 or len2 < 1 or len2 > 1000:
+    print("Length of the number should be between 1 and 10^8. \n")
     sys.exit(1)
 
-  return (num, filename)
+  return (len1, len2, filename)
 
 #------------------
 
-def gen_rand_seq(num: int, mod: int):
+def gen_rand_seq(len: int):
   
   seq = []
-  for _ in range(num):
-    seq.append(f"{randrange(-mod,+mod)}\n")
+
+  seq.append(("-" if randint(0,1) else "") + f"{randrange(1,10)}")
+  for _ in range(len-1):
+    seq.append(f"{randrange(0,10)}")
+
+  seq.append("\n")
 
   return seq
 
@@ -40,36 +46,14 @@ def write_to_file(out_file, seq):
   for elem in seq:
     out_file.write(elem)
 
-#------------------
-
-def subarray_maxsum(seq) -> int:
-
-  values = [int(elem) for elem in seq]
-  size = len(values)
-  max_sum = 0
-
-  for i in range(0, size, 1):
-    for j in range(i, size, 1):
-      
-      subarray = values[i:j]
-      cur_sum = sum(subarray)
-
-      if cur_sum > max_sum:
-        max_sum = cur_sum
-
-  return max_sum
-
 #==================
 
-num, filename = parse_args(sys.argv)
+len1, len2, filename = parse_args(sys.argv)
 
 with open(filename, mode = 'w') as out_file:
 
-  out_file.write(f"{num}\n")
-  # mod = int(2E9)
-  mod = int(15)
+  write_to_file(out_file, gen_rand_seq(len1))
+  
+  out_file.write("+\n" if randint(0,1) else "-\n")
 
-  seq = gen_rand_seq(num, mod)
-  write_to_file(out_file, seq)
-
-  # print(f"Subarray max sum is {subarray_maxsum(seq)}")
+  write_to_file(out_file, gen_rand_seq(len2))
