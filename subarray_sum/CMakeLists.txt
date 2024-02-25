@@ -18,9 +18,11 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(subarray_sum_kadane_opt subarray_sum.cpp)
-add_executable(subarray_sum_kadane subarray_sum.cpp)
-add_executable(subarray_sum_dumb subarray_sum.cpp)
+set(ALGO_TYPES DUMB KADANE TAB)
 
-target_compile_definitions(subarray_sum_dumb PRIVATE -DDUMB)
-target_compile_definitions(subarray_sum_dumb PRIVATE -DOPT)
+if(NOT ALGO_TYPE IN_LIST ALGO_TYPES)
+    message(FATAL_ERROR "ALGO_TYPE must be one of ${ALGO_TYPES}")
+endif()
+
+add_executable(subarray_sum subarray_sum.cpp)
+target_compile_definitions(subarray_sum PRIVATE -D${ALGO_TYPE})

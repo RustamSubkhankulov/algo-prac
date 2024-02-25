@@ -18,6 +18,9 @@ IntType subarray_maxsum_dumb(InputIt begin, InputIt end);
 template<typename InputIt, typename IntType = typename InputIt::value_type>
 IntType subarray_maxsum_kadane(InputIt begin, InputIt end);
 
+template<typename IntType>
+IntType subarray_maxsum_tab(std::vector<IntType>& values);
+
 int main() {
 
   std::vector<int> values;
@@ -35,8 +38,12 @@ int main() {
     std::cout << subarray_maxsum_dumb(std::cbegin(values), std::cend(values)) 
               << std::endl;
   
-  #else
+  #elif defined(KADANE)
   std::cout << subarray_maxsum_kadane(std::cbegin(values), std::cend(values)) 
+            << std::endl;
+
+  #else
+  std::cout << subarray_maxsum_tab(values) 
             << std::endl;
 
   #endif
@@ -93,4 +100,19 @@ IntType subarray_maxsum_kadane(InputIt begin, InputIt end) {
   }
 
   return max_so_far;
+}
+
+template<typename IntType>
+IntType subarray_maxsum_tab(std::vector<IntType>& values) {
+
+  std::vector<std::vector<IntType>> tab{2, std::vector<IntType>(values.size())};
+
+  tab[0][0] = tab[0][1] = values[0];
+
+  for (int ind = 1; ind < (int) values.size(); ++ind) {
+    tab[1][ind] = std::max(values[ind], values[ind] + tab[1][ind-1]);
+    tab[0][ind] = std::max(tab[0][ind-1], tab[1][ind]);
+  }
+
+  return tab[0].back();
 }
