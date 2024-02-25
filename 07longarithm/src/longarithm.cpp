@@ -7,7 +7,7 @@
 #include <utility>
 
 #include "lint/lint.hpp"
-// using namespace LONGARITHM;
+using namespace LONGARITHM;
 
 int main() {
 
@@ -19,15 +19,21 @@ int main() {
   Lint first, second;
   char oper;
 
-  std::cin >> first >> oper >> second;
+  std::cin >> first;
+
+  std::cin >> oper;
+  while (std::cin.get() != '\n');
+
+  std::cin >> second;
+
   if (oper != '+' && oper != '-') {
     throw std::invalid_argument("Operations supported: '+' and '-'");
   }
 
   std::cin.exceptions(prev_exc_mask);
 
-  // Lint res = first + second;
-  std::cout << "First: "  << first  << std::endl;
-  std::cout << "Second: " << second << std::endl;
-  // std::cout << res;
+  std::cout << "(" << first << ")" 
+            << " + " 
+            << "(" << second << ")"
+            << " = " << first + second << std::endl;
 }
