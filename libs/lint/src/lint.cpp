@@ -36,8 +36,6 @@ void Lint::add_digits(const std::deque<char>& that_digits, size_type that_length
   int max_len, min_len;
   bool this_longer = (length() > that_length);
 
-  std::cout << "length: " << length() << " that.length(): " << that_length << "\n";
-
   if (this_longer) {
 
     max_len = length();
@@ -78,6 +76,65 @@ void Lint::add_digits(const std::deque<char>& that_digits, size_type that_length
 
 void Lint::sub_digits(const std::deque<char>& that_digits, size_type that_length) {
 
+  int min_len;
+  const std::deque<char> *minuend, *subtrahend;
+  bool swap = false;
+
+  if (length() > that_length) {
+    min_len = that_length;
+
+  } else {
+    min_len = length();
+
+    swap = (length() < that_length) || (digits_[min_len] < that_digits[min_len]);
+  }
+
+  if (swap) {
+    swap_sign();
+    minuend = &that_digits;
+    subtrahend = &digits_;
+
+  } else {
+
+    minuend = &digits_;
+    subtrahend = &that_digits;
+  }
+
+  std::deque<char> res(min_len, 0);
+
+  for (int ind = 0; ind < min_len; ++ind) {
+
+    char digit = res[ind] + (*minuend)[ind] - (*subtrahend)[ind];
+
+    if (digit < 0) {
+
+      int i = ind + 1;
+      while (i < min_len && (*minuend)[i] == 0) {
+        ++i;
+      }
+
+      if (i != min_len) {
+
+        res[i--] -= 1;
+
+        while (i != ind) {
+          res[i--] = 9;
+        }
+
+        digit += 10;
+
+      } else {
+        
+        digit = std::abs(digit);
+        swap_sign();
+      }
+    }
+
+    res[ind] = digit;
+    std::cout << "[" << ind << "]: " << char((*minuend)[ind] + '0') << " - " << char((*subtrahend)[ind] + '0') << " = " << std::to_string(digit) << "\n";
+  }
+
+  std::swap(this->digits_, res);
 }
 
 Lint operator+(const Lint& lhs, const Lint& rhs) {

@@ -32,10 +32,10 @@ int main() {
 
   std::cin.exceptions(prev_exc_mask);
 
-  Lint res = first + second;
+  Lint res = (oper == '+')? first + second : first - second;
 
   std::cout << "(" << first << ")" 
-            << " + " 
+            << " " << oper << " " 
             << "(" << second << ")"
             << " = " << res << std::endl;
 }
