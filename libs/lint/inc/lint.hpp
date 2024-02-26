@@ -18,6 +18,7 @@ class Lint {
 
 // conversions
 // compare
+// arithm
 
 private:
 
@@ -44,6 +45,9 @@ public:
 
   Lint& operator+=(const Lint& that);
   Lint& operator-=(const Lint& that);
+
+  Lint& add_digits(const std::deque<char>& that);
+  Lint& sub_digits(const std::deque<char>& that);
 
   std::deque<char> get_digits() const {
     return digits_;
