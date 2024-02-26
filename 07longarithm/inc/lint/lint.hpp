@@ -50,7 +50,7 @@ public:
     return digits_;
   }
 
-  operator std::string() const;
+  explicit operator std::string() const;
 
   using size_type = std::size_t;
 

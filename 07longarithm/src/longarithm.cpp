@@ -32,8 +32,10 @@ int main() {
 
   std::cin.exceptions(prev_exc_mask);
 
+  Lint res = first + second;
+
   std::cout << "(" << first << ")" 
             << " + " 
             << "(" << second << ")"
-            << " = " << first + second << std::endl;
+            << " = " << res << std::endl;
 }

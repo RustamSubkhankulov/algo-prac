@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <iostream>
+#include <string>
 
 #include "lint.hpp"
 
@@ -6,12 +8,16 @@ namespace LONGARITHM {
 
 Lint& Lint::operator+=(const Lint& that) {
 
-  
+  std::cout << is_neg_ << " " << that.is_neg_ << "\n";
+
   if ((!is_neg_ && that.is_neg_) || (is_neg_ && !that.is_neg_)) {
     sub_digits(that.digits_, that.length());
   }
 
   add_digits(that.digits_, that.length());
+
+  std::cout << "res of operation: " << std::string(*this) << std::endl;
+
   return *this;
 }
 
@@ -30,6 +36,8 @@ void Lint::add_digits(const std::deque<char>& that_digits, size_type that_length
   int max_len, min_len;
   bool this_longer = (length() > that_length);
 
+  std::cout << "length: " << length() << " that.length(): " << that_length << "\n";
+
   if (this_longer) {
 
     max_len = length();
@@ -45,6 +53,8 @@ void Lint::add_digits(const std::deque<char>& that_digits, size_type that_length
   for (int ind = 0; ind < min_len; ++ind) {
 
     char digit = digits_[ind] + that_digits[ind] + carrier;
+
+    std::cout << "[" << ind << "]: " << char(digits_[ind] + '0') << " + " << char(that_digits[ind] + '0') << " = " << std::to_string(digit) << "\n";
 
     digits_[ind] = digit % 10;
     carrier = digit / 10;
@@ -95,8 +105,6 @@ std::istream& operator>>(std::istream& is, Lint& lint) {
   std::string str;
   std::getline(is, str);
 
-  std::cout << "string read: " << str << std::endl;
-
   lint = str;
   return is;
 }
@@ -127,7 +135,7 @@ Lint::Lint(const std::string& str) {
   }
 
   while (isstream.get(ch)) {
-    digits_.push_front(ch);
+    digits_.push_front(ch - '0');
   }
 
   isstream.exceptions(prev_exc_mask);
@@ -151,7 +159,9 @@ Lint::operator std::string() const {
     buf << '-';
   }
 
-  std::copy(std::rbegin(digits_), std::rend(digits_), std::ostream_iterator<char>(buf));
+  auto l = [](const char& ch){ return ch + '0'; };
+
+  std::transform(std::rbegin(digits_), std::rend(digits_), std::ostream_iterator<char>(buf), l);
   return buf.str();
 }
 
