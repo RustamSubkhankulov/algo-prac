@@ -8,9 +8,9 @@
 #include <stdexcept>
 #include <utility>
 #include <string>
-#include <sstream>
 #include <iterator>
 #include <iostream>
+#include <compare>
 
 namespace LONGARITHM {
 
@@ -18,7 +18,6 @@ class Lint {
 
 // conversions
 // compare
-// arithm
 
 private:
 
@@ -54,10 +53,6 @@ public:
 
   using size_type = std::size_t;
 
-  char& operator[] (size_type pos) {
-    return digits_[pos];
-  }
-
   const char& operator[](size_type pos) const {
     return digits_[pos];
   }
@@ -70,6 +65,10 @@ public:
     return is_neg_;
   }
 
+  friend std::strong_ordering operator<=> (const Lint& lhs, const Lint& rhs);
+  friend bool operator== (const Lint& lhs, const Lint& rhs);
+  friend bool operator!= (const Lint& lhs, const Lint& rhs);
+
 private:
 
   void swap_sign() {
@@ -78,6 +77,8 @@ private:
 
   void add_digits(const std::deque<char>& that_digits, size_type that_length);
   void sub_digits(const std::deque<char>& that_digits, size_type that_length);
+
+  void shrink_to_fit();
 };
 
 Lint operator+(const Lint& lhs, const Lint& rhs);

@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <iostream>
+#include <stdexcept>
 #include <string>
+#include <sstream>
 
 #include "lint.hpp"
 
@@ -8,15 +10,12 @@ namespace LONGARITHM {
 
 Lint& Lint::operator+=(const Lint& that) {
 
-  std::cout << is_neg_ << " " << that.is_neg_ << "\n";
-
   if ((!is_neg_ && that.is_neg_) || (is_neg_ && !that.is_neg_)) {
     sub_digits(that.digits_, that.length());
+
+  } else {
+    add_digits(that.digits_, that.length());
   }
-
-  add_digits(that.digits_, that.length());
-
-  std::cout << "res of operation: " << std::string(*this) << std::endl;
 
   return *this;
 }
@@ -25,9 +24,11 @@ Lint& Lint::operator-=(const Lint& that) {
 
   if ((!is_neg_ && that.is_neg_) || (is_neg_ && !that.is_neg_)) {
     add_digits(that.digits_, that.length());
+
+  } else {
+    sub_digits(that.digits_, that.length());    
   }
 
-  sub_digits(that.digits_, that.length());
   return *this;
 }
 
@@ -51,8 +52,6 @@ void Lint::add_digits(const std::deque<char>& that_digits, size_type that_length
   for (int ind = 0; ind < min_len; ++ind) {
 
     char digit = digits_[ind] + that_digits[ind] + carrier;
-
-    std::cout << "[" << ind << "]: " << char(digits_[ind] + '0') << " + " << char(that_digits[ind] + '0') << " = " << std::to_string(digit) << "\n";
 
     digits_[ind] = digit % 10;
     carrier = digit / 10;
@@ -84,9 +83,9 @@ void Lint::sub_digits(const std::deque<char>& that_digits, size_type that_length
     min_len = that_length;
 
   } else {
-    min_len = length();
 
-    swap = (length() < that_length) || (digits_[min_len] < that_digits[min_len]);
+    min_len = length();
+    swap = (length() < that_length) || (digits_[min_len-1] < that_digits[min_len-1]);
   }
 
   if (swap) {
@@ -131,10 +130,17 @@ void Lint::sub_digits(const std::deque<char>& that_digits, size_type that_length
     }
 
     res[ind] = digit;
-    std::cout << "[" << ind << "]: " << char((*minuend)[ind] + '0') << " - " << char((*subtrahend)[ind] + '0') << " = " << std::to_string(digit) << "\n";
   }
 
   std::swap(this->digits_, res);
+  shrink_to_fit();
+}
+
+void Lint::shrink_to_fit() {
+
+  for (int ind = length() - 1; ind > 0 && digits_[ind] == 0; --ind) {
+    digits_.pop_back();
+  }
 }
 
 Lint operator+(const Lint& lhs, const Lint& rhs) {
@@ -149,6 +155,44 @@ Lint operator-(const Lint& lhs, const Lint& rhs) {
   auto temp{lhs};
   temp -= rhs;
   return temp;
+}
+
+std::strong_ordering operator<=> (const Lint& lhs, const Lint& rhs) {
+
+  if (lhs.is_neg() && !rhs.is_neg()) {
+    return std::strong_ordering::less;
+  }
+
+  if (!lhs.is_neg() && rhs.is_neg()) {
+    return std::strong_ordering::less;
+  }
+
+  bool both_neg = lhs.is_neg() && rhs.is_neg();
+
+  if (lhs.length() < rhs.length()) {
+    return (both_neg)? std::strong_ordering::greater : std::strong_ordering::less;
+  }
+
+  if (lhs.length() > rhs.length()) {
+    return (both_neg)? std::strong_ordering::less: std::strong_ordering::greater;
+  }
+
+  auto length = lhs.length();
+
+  if (!length) {
+    return std::strong_ordering::equal;
+  }
+
+  return (both_neg)? rhs.digits_[length - 1] <=> lhs.digits_[length - 1]: 
+                     lhs.digits_[length - 1] <=> rhs.digits_[length - 1];
+}
+
+bool operator== (const Lint& lhs, const Lint& rhs) {
+  return (lhs <=> rhs) == std::strong_ordering::equal;
+}
+
+bool operator!= (const Lint& lhs, const Lint& rhs) {
+  return (lhs <=> rhs) != std::strong_ordering::equal;
 }
 
 std::ostream& operator<<(std::ostream& os, const Lint& lint) {
