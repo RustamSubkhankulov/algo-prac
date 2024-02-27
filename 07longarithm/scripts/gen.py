@@ -21,7 +21,7 @@ def parse_args(argv):
   filename = argv[3]
 
   if len1 < 1 or len1 > 1000 or len2 < 1 or len2 > 1000:
-    print("Length of the number should be between 1 and 10^8. \n")
+    print("Length of the number should be between 1 and 1000. \n")
     sys.exit(1)
 
   return (len1, len2, filename)
