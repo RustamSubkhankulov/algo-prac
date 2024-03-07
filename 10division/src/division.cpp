@@ -29,7 +29,11 @@ int main(const int argc, const char** argv) {
   assert(divisor >= 1 && "Divisor >= 1.");
   assert(divisor < 150000000 && "Divisor < 150000000.");
 
-  std::cout << fraction_to_str(dividend, divisor) << std::endl;
+  for (int ind = 0; ind < 10000; ++ind) {
+    (void) fraction_to_str(dividend, divisor);
+  }
+
+  // std::cout << fraction_to_str(dividend, divisor) << std::endl;
   return 0;
 }
 
@@ -49,6 +53,8 @@ std::string fraction_to_str(int dividend, int divisor) {
 
     int tmp = (remainder << 1);
     remainder = (tmp << 2) + tmp;
+
+    // remainder *= 10;
 
     res.push_back('0' + remainder / divisor);
     remainder %= divisor;
