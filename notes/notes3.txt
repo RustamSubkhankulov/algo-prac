@@ -1,0 +1,241 @@
+= задача СОРТИРОВКИ: 
+последовательность ключей должна быть упорядочена 
+по невозрастанию(неубыванию)
+
+= алгоритм УСТОЙЧИВЫЙ, если он сохраняет отн порядок 
+эл-тов с одинаковыми ключами - относительно изначального
+
+= сортировки, сравнивающие элементы для их упорядочивания -
+сортировки СРАВНЕНИЕМ
+
+less(a,b)
+!less(a,b) && !less(b,a) -> eq(a,b)=True
+
+= ИНВЕРСИЯ - пара ключей с нарушенным порядком следования
+  в отсортированнм мн-ве количество инверсий равно нулю
+
+= 1. BUBBLE sort 
+- simple
+- steady
+- best  O(n), worst O(n^2)
+- in-place
+
+void bubbleSort(int arr[], int n)
+{
+  int i, j;
+  bool swapped;
+  for (i = 0; i < n - 1; i++) {
+    swapped = false;
+    for (j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swap(arr[j], arr[j + 1]);
+        swapped = true;
+      }
+    }
+
+    // If no two elements were swapped
+    // by inner loop, then break
+    if (swapped == false)
+      break;
+  }
+}
+
+= 2. INSERTION sort
+- steady
+- best O(n), worst O(n^2)
+- in-place
+- online-algorithm - new elem for O(n)
+
+после i-го прохода в первых i позициях 
+элементы отсортированы
+
+void insertionSort(int arr[], int n)
+{
+  for (int i = 1; i < n; i++) {
+    
+    int j = i;
+    int key = arr[i];
+
+    while (j >= 1 && arr[j-1] > key) {
+      arr[j] = arr[j-1];
+      j = j - 1;
+    }
+    arr[j] = key;
+  }
+}
+
+= 3. SHELL sort
+- not steady
+- best O(n), worst O(N^(3/2))
+- in-place
+- низкий коэф амортизации, конкурентно-способен при малых N
+
+void shellsort(int *a, int n) {
+  int h;
+  
+  for (h = 1; h <= n / 9; h = 3*h + 1)
+    ;
+  
+  // iterations with different gaps
+  for ( ; h > 0; h /= 3) {
+    
+    for (int i = h; i < n; i++) {
+      
+      int j = i;
+      int tmp = a[i];
+      
+      while (j >= h && a[j-h] > tmp) {
+        a[j] = a[j-h];
+        j -= h;
+      }
+      
+      a[j] = tmp;
+    }
+  }
+}
+
+= 4. SELECTION sort
+- steady, if we stop at the first min element
+- complexity always O(n^2)
+- in-place
+- O(n) swap operations - for arrays with large elements
+                         that are fast-comparable
+
+void selectionSort(int arr[], int n) 
+{ 
+  int i, j, min_idx; 
+
+  for (i = 0; i < n - 1; i++) { 
+
+    min_idx = i; 
+    for (j = i + 1; j < n; j++) { 
+      if (arr[j] < arr[min_idx]) 
+          min_idx = j; 
+    } 
+
+    if (min_idx != i) 
+      swap(arr[min_idx], arr[i]); 
+  } 
+}
+
+= k-ая порядковая статистика
+k-ый по упорядочиванию величины элемент
+
+если операция упор. это less, то min элемент - 
+первая порядковая статистика
+
+max elem - N-тая порядковая статистика
+МЕДИАНА - средний по величине, но не среднее! "середина"
+
+= 5. ВЫБОРКА SELECTION
+            Selection(Sl, k), k <= |Sl|
+Selection = pivot, |Sl| < k <= |Sl| + |Spivot| 
+            Selection(Sr, k - |Sl| - |Spivot|), k > |Sl| + |Spivot|
+
+complexity O(n), O(n^2) in worst case
+
+= 6. QUICK sort
+- steady
+- O(nlogn), words O(n^2) 
+  (median of the three random to decrese probability)
+- in-place
+- memory for frames - O(n)
+
+можно выбрать порог для перехода на обычную сортировку - 
+к примеру обменом (пузырьком)
+
+int partition(int arr[],int low,int high)
+{
+  int pivot=arr[high]; 
+  // (in this algo the last element is always picked as pivot)
+  int i=(low-1);
+   
+  for(int j=low;j<=high;j++)
+  {
+    if(arr[j]<pivot)
+    {
+      i++;
+      swap(arr[i],arr[j]);
+    }
+  }
+  swap(arr[i+1],arr[high]);
+  return (i+1);
+}
+ 
+void quickSort(int arr[],int low,int high)
+{
+  if(low<high)
+  {
+    int pi=partition(arr,low,high);
+     
+    quickSort(arr,low,pi-1);
+    quickSort(arr,pi+1,high);
+  }
+}
+
+= 7. MERGE sort
+двухпутевое слияние отсортированных массивов - O(n)
+декомпозиция - O(1)
+для маленьких порог - переход на пузырек
+
+- steady
+- always O(nlogn)
+- not in-place, O(N) for merging
+- memory for frames O(N)
+
+void mergeSort(int a[], int low, int high) {
+  
+  if (high - low < THRESHOLD) {
+    plainSort(a, low, high);
+  } else {
+
+    int mid = (low + high) / 2;
+    
+    mergeSort(a, low, mid);
+    mergeSort(a, mid+1, high);
+    
+    merge(a, low, mid, high);
+  }
+}
+
+= BETTER THAN O(nlogn) is impossible for сортировки сравнением
+
+= 8. Сортировка ПОДСЧЕТОМ
+- ключи перечислимы, могут быть индексами в массиве счётчиков
+- ограниченное число ключей
+- память O(|D(K|)
+- O(|D(K)|) + O(n) + O(|D(K)|) = O(|D(K)|) + O(n)
+
+= 9. ПОРАЗРЯДНАЯ сортировка
+- ключи деляться на фрагменты, удовл требованиям сортировки подсчетом
+- память O(|D(Ki|)
+- сложность O(N|D(Ki|) (maybe O(|D(Ki)|) + O(n) ?) 
+- быстрее делить не на 10ные разряды, а на биты
+
+= ВНЕШНЯЯ сортировка
+сортировка при недостатке внешней памяти
+
+= 9. Внешняя merge sort
+делим файлы на чанки, грузим в память, сортируем, записываем
+
+= 10. Сортировка сериями
+выделяем постепенно серии увеличивающейся длины
+которые попарно сливаются обратно в файл
+память нужна для ДВУХ ЭЛЕМЕНТОВ!
+- log2(N) проходов, O(nlogn)
+- memory O(1)
+- улучшение - предварительно сортируем чанки максимальным
+  помещающимся в память размером, сортировку слиянием 
+  начинаем с k0 итерации
+
+ _____________________________________________
+|____________|BEST_|AVER_|WORST|MEMORY|STEADY |
+|BUBBLE      |N    |N^2  |N^2  |1     |Y      |
+|SHELL       |N^7/6|N^7/6|N^4/3|1     |N      |
+|INSERTION   |N    |N^2  |N^2  |1     |Y      |
+|SELECTION   |N    |N^2  |N^2  |1     |Y      |
+|QUICK       |NlogN|NlogN|N^2  |1     |Y      |
+|MERGE       |NlogN|NlogN|NlogN|1     |Y      |
+|ПОДСЧЕТОМ   |N    |N    |N    |N     |Y      |
+|ПОРАЗРЯДНАЯ |N    |N    |N    |N     |Y      |
+ ---------------------------------------------
