@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         intersect
-        DESCRIPTION "Polynomial calculation"
+        DESCRIPTION "3. Polynomial calculation"
         LANGUAGES CXX
         )
 

@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 
 project(
-        even_numbers
-        DESCRIPTION "9. Even numbers calculation"
+        task
+        DESCRIPTION "11. Max three"
         LANGUAGES CXX
         )
 
@@ -16,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(EXEC_SRC_DIR src)
@@ -24,5 +24,9 @@ set(EXEC_INC_DIR inc)
 
 file(GLOB EXEC_SOURCES CONFIGURE_DEPENDS ${EXEC_SRC_DIR}/*.cpp)
 
-add_executable(${PROJECT_NAME} ${EXEC_SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${EXEC_INC_DIR})
+set(ALGO_TYPES 1 2)
+foreach(ALGO ${ALGO_TYPES})
+  add_executable(${PROJECT_NAME}${ALGO} ${EXEC_SOURCES})
+  target_include_directories(${PROJECT_NAME}${ALGO} PRIVATE ${EXEC_INC_DIR})
+  target_compile_definitions(${PROJECT_NAME}${ALGO} PRIVATE -DALGO${ALGO})
+endforeach()

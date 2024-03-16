@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         division
-        DESCRIPTION "Fraction calculation"
+        DESCRIPTION "10. Fraction calculation"
         LANGUAGES CXX
         )
 

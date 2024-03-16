@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         intersect
-        DESCRIPTION "Intersection of two multisets"
+        DESCRIPTION "2. Intersection of two multisets"
         LANGUAGES CXX
         )
 

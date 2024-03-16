@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         subarray_sum
-        DESCRIPTION "Max sum of subarray elements"
+        DESCRIPTION "6. Max sum of subarray elements"
         LANGUAGES CXX
         )
 

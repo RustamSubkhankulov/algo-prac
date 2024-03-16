@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         partition
-        DESCRIPTION "Attempts to solve partition problem."
+        DESCRIPTION "5. Attempts to solve partition problem."
         LANGUAGES CXX
         )
 

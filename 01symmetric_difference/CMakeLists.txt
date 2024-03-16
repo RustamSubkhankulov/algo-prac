@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         symmdiff
-        DESCRIPTION "Symmetric difference of two sets"
+        DESCRIPTION "1. Symmetric difference of two sets"
         LANGUAGES CXX
         )
 

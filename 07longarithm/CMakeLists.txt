@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         longarithm
-        DESCRIPTION "Arithmetics using long integers"
+        DESCRIPTION "7. Arithmetics using long integers"
         LANGUAGES CXX
         )
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
         countcomm
-        DESCRIPTION "Counting comments in Object Pascal"
+        DESCRIPTION "4. Counting comments in Object Pascal"
         LANGUAGES CXX
         )
 
