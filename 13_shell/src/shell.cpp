@@ -122,9 +122,10 @@ int main() {
   }
 
   float per = 0;
-  for (ind = 0; ind <= cur; ++ind) {
+  for (ind = 0; ind < cur; ++ind) {
     per += std::sqrt((vec[(ind == cur) ? 0 : ind+1] - vec[ind]).len2());
   }
+  per += std::sqrt((vec[0] - vec[cur]).len2());
 
   std::cout << std::setprecision(3) << per;
   return 0;
