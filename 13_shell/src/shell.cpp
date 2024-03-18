@@ -117,10 +117,6 @@ int main() {
     vec[++cur] = vec[ind];
   }
 
-  for (ind = 0; ind <= cur; ++ind) {
-    vec[ind] += center;
-  }
-
   float per = 0;
   for (ind = 0; ind < cur; ++ind) {
     per += std::sqrt((vec[(ind == cur) ? 0 : ind+1] - vec[ind]).len2());
