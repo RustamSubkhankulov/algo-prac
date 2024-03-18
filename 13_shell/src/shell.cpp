@@ -110,10 +110,10 @@ int main() {
   int cur, ind;
   for (cur = 1, ind = 2; ind < num; ++ind) {
 
-    while (cur > 0 && !is_left_turn(vec[cur-1], vec[cur], vec[ind])) {
+    if  (cur > 0 && !is_left_turn(vec[cur-1], vec[cur], vec[ind])) {
       --cur;
     }
-
+      
     vec[++cur] = vec[ind];
   }
 
