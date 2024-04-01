@@ -95,7 +95,7 @@ public:
     insert_node(root_, str);
   }
 
-  bool match(const std::string& str) {
+  bool match(const std::string_view& str) {
 
     size_t str_len = str.size();
 
