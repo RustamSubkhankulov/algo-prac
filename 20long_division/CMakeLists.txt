@@ -26,3 +26,6 @@ file(GLOB EXEC_SOURCES CONFIGURE_DEPENDS ${EXEC_SRC_DIR}/*.cpp)
 
 add_executable(${PROJECT_NAME} ${EXEC_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${EXEC_INC_DIR})
+
+target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC lint)
