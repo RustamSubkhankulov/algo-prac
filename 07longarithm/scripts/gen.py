@@ -10,7 +10,7 @@ def parse_args(argv):
   Parse sys.argv for arguments of prog.
   """
   if len(argv) != 4:
-    print("Usage: ./gen.py num filename \n")
+    print("Usage: ./gen.py len1 len2 filename \n")
     print("where 1. len1 - len of the first num \n")
     print("      2. len2 - len of the second num \n")
     print("      3. filename - output file name. \n")
