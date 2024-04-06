@@ -29,7 +29,7 @@ public:
   Lint() {}
 
   template <typename T>
-  Lint(T&& arg, bool is_neg = false):
+  Lint(T&& arg, bool is_neg):
     digits_(std::forward<T>(arg)),
     is_neg_(is_neg) {}
 
@@ -44,6 +44,9 @@ public:
 
   Lint& operator+=(const Lint& that);
   Lint& operator-=(const Lint& that);
+
+  Lint& operator/=(const Lint& that);
+  Lint& operator*=(int mul);
 
   std::deque<char> get_digits() const {
     return digits_;
@@ -69,6 +72,8 @@ public:
   friend bool operator== (const Lint& lhs, const Lint& rhs);
   friend bool operator!= (const Lint& lhs, const Lint& rhs);
 
+  friend std::strong_ordering abs_cmp(const Lint& lhs, const Lint& rhs);
+
 private:
 
   void swap_sign() {
@@ -77,12 +82,17 @@ private:
 
   void add_digits(const std::deque<char>& that_digits, size_type that_length);
   void sub_digits(const std::deque<char>& that_digits, size_type that_length);
+  void div_digits(const Lint& divisor);
 
   void shrink_to_fit();
+  int get_cur_quotient(const Lint& dividend, const Lint& divisor, Lint& mul);
 };
 
 Lint operator+(const Lint& lhs, const Lint& rhs);
 Lint operator-(const Lint& lhs, const Lint& rhs);
+
+Lint operator/(const Lint& lhs, const Lint& rhs);
+Lint operator*(const Lint& lint, int mul);
 
 std::istream& operator>>(std::istream& is, Lint& lint);
 std::ostream& operator<<(std::ostream& os, const Lint& lint);

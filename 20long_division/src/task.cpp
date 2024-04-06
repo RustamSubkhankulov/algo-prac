@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "lib/lint.h"
+#include "lint/lint.hpp"
 using namespace LONGARITHM;
 
 int main() {
@@ -10,10 +10,10 @@ int main() {
   std::cin.exceptions(std::ios_base::failbit | std::ios_base::badbit);
 
   Lint first, second;
-  char oper;
 
   std::cin >> first;
-  while (std::cin.get() != '\n');
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // while (std::cin.get() != '\n');
   std::cin >> second;
 
   std::cin.exceptions(prev_exc_mask);
@@ -22,6 +22,6 @@ int main() {
             << "/ \n"
             << second << std::endl
             << first / second << std::endl;
-  
+
   return 0;
 }
