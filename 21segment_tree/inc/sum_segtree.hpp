@@ -27,7 +27,7 @@ public:
   sum_segtree(const std::vector<T>& data):
   original_size_(data.size()),
   data_size_(compute_data_size(original_size_)),
-  tree_size_(data_size_ * 4),
+  tree_size_(data_size_ * 2),
   tree_(tree_size_, 0U) {
 
     build(data, 1, 0, data_size_ - 1);
@@ -73,10 +73,6 @@ template <typename T>
 void sum_segtree<T>::build(const std::vector<T>& data, 
   size_t cur_idx, size_t l_idx, size_t r_idx) {
 
-  if (l_idx >= original_size_) {
-    return;
-  }
-
   if (l_idx == r_idx) {
     tree_[cur_idx] = data[l_idx];
 
@@ -87,8 +83,13 @@ void sum_segtree<T>::build(const std::vector<T>& data,
     size_t l_child_idx = cur_idx * 2;
     size_t r_child_idx = cur_idx * 2 + 1;
 
-    build(data, l_child_idx, l_idx, m_idx);
-    build(data, r_child_idx, m_idx + 1, r_idx);
+    if (l_idx < original_size_) {
+      build(data, l_child_idx, l_idx, m_idx);
+    }
+
+    if (m_idx + 1 < original_size_) {
+      build(data, r_child_idx, m_idx + 1, r_idx);
+    }
 
     tree_[cur_idx] = tree_[l_child_idx] + tree_[r_child_idx];
   }
@@ -111,11 +112,15 @@ T sum_segtree<T>::query_recursive(size_t cur_idx, size_t l_idx, size_t r_idx,
   
   T res = 0;
 
-  if (ql_idx <= std::min(qr_idx, m_idx)) {
+  if (ql_idx < original_size_ 
+   && ql_idx <= std::min(qr_idx, m_idx)) {
+    
     res += query_recursive(l_child_idx, l_idx, m_idx, ql_idx, std::min(qr_idx, m_idx));
   }
 
-  if (std::max(m_idx + 1, ql_idx) <= qr_idx) {
+  if (std::max(m_idx + 1, ql_idx) < original_size_ 
+   && std::max(m_idx + 1, ql_idx) <= qr_idx) {
+
     res += query_recursive(r_child_idx, m_idx + 1, r_idx, std::max(m_idx + 1, ql_idx), qr_idx);
   }
 
