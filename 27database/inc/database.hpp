@@ -104,7 +104,6 @@ public:
   bool printEntry(const std::string& key, std::ostream& os) {
     
     uint64_t entry = findEntry(key).first;
-    // std::cout << "Found entry: " << std::hex << entry << std::endl;
     
     if (entry == EmptyEntry) {
       return false;
@@ -179,7 +178,6 @@ private:
     data.read(reinterpret_cast<char*>(&entry), sizeof(entry));
     assert(data.good());
     
-    // std::cout << std::hex << "Entry: " << entry << std::endl;
     return entry;
   }
 
@@ -231,10 +229,7 @@ private:
   void insertEntry(uint64_t insertionIdx, 
     const std::string& key, const std::string& value) {
 
-    // std::cerr << "insertEntry at " << insertionIdx << std::endl;
-
     size_t entryOffset = DataOffset + insertionIdx * EntrySize;
-    // std::cout << "entryOffset: 0x" << std::hex << entryOffset << std::endl;
     
     dataWriteString(entryOffset + KeyFieldOffs, key);
     dataWriteString(entryOffset + ValueFieldOffs, value);
@@ -258,7 +253,6 @@ private:
     assert(data.good());
 
     insertEntry(insertionIdx, key, value);
-    // std::clog << "Inserted \n";
     return true;
   }
 
@@ -270,7 +264,7 @@ private:
 
     do {
 
-      size_t keyOffset = next * EntrySize + KeyFieldOffs;
+      size_t keyOffset = DataOffset + next * EntrySize + KeyFieldOffs;
       std::string collisionKey = dataReadString(keyOffset);
 
       if (collisionKey.substr(0, key.length()) == key) {
@@ -302,8 +296,6 @@ private:
 
   std::string dataReadString(size_t offset) {
 
-    // std::clog << "dataReadString: ";
-
     data.flush();
     std::string str;
     
@@ -319,14 +311,10 @@ private:
 
     } while (ch != '\0');
 
-    // std::clog << str << std::endl;
     return str;
   }
 
   void dataWriteString(size_t offset, const std::string& str) {
-
-    // std::clog << "dataWriteString: " << str << std::endl;
-    // std::clog << "offset: 0x" << std::hex << offset << std::endl;
 
     data.seekp(offset, std::ios_base::seekdir::beg);
     assert(data.good());
