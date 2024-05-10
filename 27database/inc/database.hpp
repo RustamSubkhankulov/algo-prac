@@ -87,6 +87,7 @@ public:
     }
 
     deleteEntryImpl(hasher(key) % HashSize, entry, prev);
+    freedIdxStack.push(entry);
     return true;
   }
 
@@ -123,26 +124,36 @@ private:
 
   void deleteEntryImpl(size_t hash, uint64_t entry, uint64_t prev) {
     
-    if (prev == EmptyEntry) {
+    if (prev != EmptyEntry) {
+
+      std::cerr << "Deleting with collision \n";
 
       size_t prevEntryOffset = DataOffset + prev * EntrySize;
       size_t entryOffset     = DataOffset + entry * EntrySize;
 
       size_t nextOffset = entryOffset + NextFieldOffs;
       data.seekg(nextOffset);
+      assert(data.good());
 
       uint64_t next;
       data.read(reinterpret_cast<char*>(&next), sizeof(next));
+      assert(data.good());
 
       size_t nextOfPrevOffs = prevEntryOffset + NextFieldOffs;
       data.seekp(nextOfPrevOffs);
+      assert(data.good());
+
       data.write(reinterpret_cast<const char*>(&next), sizeof(next));
-    
+      assert(data.good());
+
     } else {
 
       data.seekp(hash * sizeof(uint64_t));
+      assert(data.good());
+
       data.write(reinterpret_cast<const char*>(&EmptyEntry), sizeof(EmptyEntry));
-    }
+      assert(data.good());
+    }  
   }
 
   std::pair<uint64_t, uint64_t>
